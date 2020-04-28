@@ -4,8 +4,9 @@ import java.util.Date;
 
 public class Message {
 
-	private User from;
-	private User to;
+	
+	private String from;
+	private String to;
 	private Date date;
 	private String subject;
 	private String content;
@@ -13,7 +14,7 @@ public class Message {
 	public Message() {
 	}
 
-	public Message(User from, User to, Date date, String subject, String content) {
+	public Message(String from, String to, Date date, String subject, String content) {
 		super();
 		this.from = from;
 		this.to = to;
@@ -22,19 +23,19 @@ public class Message {
 		this.content = content;
 	}
 
-	public User getFrom() {
+	public String getFrom() {
 		return from;
 	}
 
-	public void setFrom(User from) {
+	public void setFrom(String from) {
 		this.from = from;
 	}
 
-	public User getTo() {
+	public String getTo() {
 		return to;
 	}
 
-	public void setTo(User to) {
+	public void setTo(String to) {
 		this.to = to;
 	}
 
@@ -61,5 +62,12 @@ public class Message {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	
+	@Override
+	public String toString() {
+		return "Message [from=" + from + ", to=" + to + ", date=" + date + ", subject=" + subject + ", content="
+				+ content + "]";
+	}
+
 
 }

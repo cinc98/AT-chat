@@ -32,6 +32,8 @@ public class WSEndPoint {
 		
 		
 	}
+	
+	
 
 	@OnMessage
 	public void echoTextMessage(String msg) {

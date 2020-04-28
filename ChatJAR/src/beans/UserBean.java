@@ -113,4 +113,20 @@ public class UserBean {
 
 	}
 
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+
+	public List<User> getActiveUsers() {
+		return activeUsers;
+	}
+
+	public void setActiveUsers(List<User> activeUsers) {
+		this.activeUsers = activeUsers;
+	}
+
 }
