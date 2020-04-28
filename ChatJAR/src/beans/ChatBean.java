@@ -1,7 +1,6 @@
 package beans;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +46,37 @@ public class ChatBean {
 		List<Message> retval = new ArrayList<Message>();
 		return retval;
 	}
+	
+	@POST
+	@Path("/user")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response sendMessageToUser(Message m) {
+		Date d = new Date();
+		m.setDate(d);
+		messages.add(m);
+		
+		String msg="";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+		    // convert user object to json string and return it 
+		     msg = mapper.writeValueAsString(m);
+		}
+		catch (JsonGenerationException | JsonMappingException  e) {
+		    // catch various errors
+		    e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		
+		
+		System.out.println(msg);
+		ws.echoTextMessage(msg);
+
+		return Response.status(200).build();
+
+	}
+
 
 	@POST
 	@Path("/all")
