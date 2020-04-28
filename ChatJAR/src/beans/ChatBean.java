@@ -33,8 +33,6 @@ public class ChatBean {
 	@EJB
 	WSEndPoint ws;
 
-	@EJB
-	UserBean ub;
 
 	private List<Message> messages = new ArrayList<Message>();
 
@@ -42,8 +40,28 @@ public class ChatBean {
 	@Path("/{user}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public List<Message> getAllMessages(@PathParam("user") String username) {
-		List<Message> retval = new ArrayList<Message>();
+	public List<String> getAllMessages(@PathParam("user") String username) {
+		List<String> retval = new ArrayList<String>();
+		String msg="";
+		ObjectMapper mapper = new ObjectMapper();
+
+		for(Message m : messages) {
+			if(m.getFrom().equals(username) || m.getTo().equals(username) || m.getTo().equals("all")) {
+				try {
+				     msg = mapper.writeValueAsString(m);
+				}
+				catch (JsonGenerationException | JsonMappingException  e) {
+				    // catch various errors
+				    e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+				retval.add(msg);
+			}
+		}
+		
+		
 		return retval;
 	}
 	
