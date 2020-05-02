@@ -1,21 +1,17 @@
 package beans;
 
 import java.lang.management.ManagementFactory;
-import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLConnection;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.Schedule;
-import javax.ejb.Schedules;
+
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-import javax.naming.InitialContext;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
