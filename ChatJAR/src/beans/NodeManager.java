@@ -23,7 +23,7 @@ public interface NodeManager {
 	@POST
 	@Path("/node")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addNode(Host host);
+	public void addNode(Host host);
 
 	@POST
 	@Path("/nodes")
@@ -33,9 +33,9 @@ public interface NodeManager {
 	@DELETE
 	@Path("/node/{alias}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteNode(@PathParam("alias") String alias);
+	public boolean deleteNode(@PathParam("alias") String alias);
 
 	@GET
 	@Path("/node")
-	public Response getNode();
+	public Host getNode();
 }
