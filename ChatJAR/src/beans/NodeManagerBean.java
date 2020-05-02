@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.ejb.Schedule;
+import javax.ejb.Schedules;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.management.MBeanServer;
@@ -28,7 +31,7 @@ import models.Host;
 public class NodeManagerBean implements NodeManager {
 
 	private List<Host> hosts = new ArrayList<Host>();
-	private Host host = new Host();
+	private Host host = null;
 	private String master = null;
 
 	@PostConstruct
@@ -36,6 +39,7 @@ public class NodeManagerBean implements NodeManager {
 		try {
 			MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 			ObjectName http = new ObjectName("jboss.as:socket-binding-group=standard-sockets,socket-binding=http");
+			host = new Host();
 			this.host.setAddress((String) mBeanServer.getAttribute(http, "boundAddress") + ":8080");
 			this.host.setAlias(System.getProperty("jboss.node.name") + ":8080");
 
@@ -43,9 +47,11 @@ public class NodeManagerBean implements NodeManager {
 
 			System.out.println("MASTER ADDR: " + master + ", node name: " + this.host.getAlias() + ", node address: "
 					+ this.host.getAddress());
-			if (master != null && !master.equals("") && !master.equals(this.host.getAddress())) {
-				System.out.println("sadsadf");
-
+			if (!master.equals(this.host.getAddress())) {
+				ResteasyClient client = new ResteasyClientBuilder().build();
+				ResteasyWebTarget rtarget = client.target("http://" + master + "/ChatWAR/rest");
+				NodeManager rest = rtarget.proxy(NodeManager.class);
+				rest.registerNode(host);
 			}
 
 		} catch (
@@ -54,18 +60,29 @@ public class NodeManagerBean implements NodeManager {
 			e.printStackTrace();
 		}
 	}
+	
+	@PreDestroy
+	private void destroy() {
+		ResteasyClient client = new ResteasyClientBuilder().build();
+		for (Host h : hosts) {
+			ResteasyWebTarget rtarget = client.target("http://" + h.getAddress() + "/ChatWAR/rest/");
+			NodeManager rest = rtarget.proxy(NodeManager.class);
+			rest.deleteNode(this.host.getAlias());
+
+		}
+		
+	}
 
 	@Override
 	public Response registerNode(Host host) {
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		for(Host h : hosts) {
+		for (Host h : hosts) {
 			ResteasyWebTarget rtarget = client.target("http://" + h.getAddress() + "/ChatWAR/rest/");
 			NodeManager rest = rtarget.proxy(NodeManager.class);
 			rest.addNode(host);
 
-
 		}
-		
+
 		return Response.status(200).build();
 	}
 
@@ -76,7 +93,7 @@ public class NodeManagerBean implements NodeManager {
 
 	@Override
 	public Response getNodes(List<Host> h) {
-		for(Host ho : h) {
+		for (Host ho : h) {
 			hosts.add(ho);
 		}
 		return Response.status(200).build();
@@ -84,8 +101,8 @@ public class NodeManagerBean implements NodeManager {
 
 	@Override
 	public boolean deleteNode(String alias) {
-		for(Host h:hosts) {
-			if(h.getAlias().equals(alias)) {
+		for (Host h : hosts) {
+			if (h.getAlias().equals(alias)) {
 				hosts.remove(h);
 				return true;
 			}
@@ -97,8 +114,6 @@ public class NodeManagerBean implements NodeManager {
 	public Host getNode() {
 		return this.host;
 	}
-
-
 
 
 }
