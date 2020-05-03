@@ -33,9 +33,14 @@ public interface NodeManager {
 	public Response getNodes(List<Host> hosts);
 	
 	@GET
-	@Path("/users/loggedIn")
+	@Path("/user/loggedIn")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<User> getUsers();
+	
+	@POST
+	@Path("/user/loggedInSet")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void setUsers(List<User> users);
 
 	@DELETE
 	@Path("/node/{alias}")
@@ -46,4 +51,5 @@ public interface NodeManager {
 	@Path("/node")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Host getNode();
+
 }

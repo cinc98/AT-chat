@@ -1,7 +1,13 @@
 package models;
 
-public class Host {
+import java.io.Serializable;
 
+public class Host implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String alias;
 	private String address;
 

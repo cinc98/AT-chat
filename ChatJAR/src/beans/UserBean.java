@@ -16,6 +16,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+
+import models.Host;
 import models.User;
 import ws.WSEndPoint;
 
@@ -27,6 +32,7 @@ public class UserBean {
 	@EJB
 	WSEndPoint ws;
 
+	
 	private List<User> users = new ArrayList<User>();
 	private List<User> activeUsers = new ArrayList<User>();
 
@@ -55,6 +61,16 @@ public class UserBean {
 			if (u.getUsername().equals(user.getUsername()) && u.getPassword().equals(user.getPassword())) {
 				activeUsers.add(user);
 				System.out.println("User " + user.getUsername() + " logged in!");
+				ResteasyClient client = new ResteasyClientBuilder().build();
+
+				for (Host h : NodeManagerBean.hosts) {
+					ResteasyWebTarget rtarget = client.target("http://" + h.getAddress() + "/ChatWAR/connection");
+					NodeManager rest = rtarget.proxy(NodeManager.class);
+					rest.setUsers(activeUsers);
+				}
+				
+		
+				ws.echoTextMessage(activeUsers.toString());
 				return Response.status(200).build();
 			}
 

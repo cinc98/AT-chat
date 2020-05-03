@@ -31,7 +31,7 @@ public class NodeManagerBean implements NodeManager {
 	@EJB
 	private UserBean ub;
 	
-	private List<Host> hosts = new ArrayList<Host>();
+	public static List<Host> hosts = new ArrayList<Host>();
 	private Host host = null;
 	private String master = null;
 
@@ -41,7 +41,7 @@ public class NodeManagerBean implements NodeManager {
 			MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 			ObjectName http = new ObjectName("jboss.as:socket-binding-group=standard-sockets,socket-binding=http");
 			host = new Host();
-			this.host.setAddress("d5d5620d.ngrok.io");
+			this.host.setAddress("770a37fb.ngrok.io");
 			this.host.setAlias(System.getProperty("jboss.node.name") + ":8080");
 //
 //			this.master = "192.168.9.107:8080";
@@ -143,6 +143,11 @@ public class NodeManagerBean implements NodeManager {
 	public List<User> getUsers() {
 		
 		return ub.getActiveUsers();
+	}
+
+	@Override
+	public void setUsers(List<User> users) {
+		ub.setActiveUsers(users);
 	}
 
 }
