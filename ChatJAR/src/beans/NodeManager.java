@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import models.Host;
+import models.User;
 
 public interface NodeManager {
 
@@ -30,6 +31,11 @@ public interface NodeManager {
 	@Path("/nodes")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getNodes(List<Host> hosts);
+	
+	@GET
+	@Path("/users/loggedIn")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> getUsers();
 
 	@DELETE
 	@Path("/node/{alias}")
