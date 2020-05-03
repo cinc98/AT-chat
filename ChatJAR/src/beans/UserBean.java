@@ -61,16 +61,16 @@ public class UserBean {
 			if (u.getUsername().equals(user.getUsername()) && u.getPassword().equals(user.getPassword())) {
 				activeUsers.add(user);
 				System.out.println("User " + user.getUsername() + " logged in!");
-				ResteasyClient client = new ResteasyClientBuilder().build();
-
-				for (Host h : NodeManagerBean.hosts) {
-					ResteasyWebTarget rtarget = client.target("http://" + h.getAddress() + "/ChatWAR/connection");
-					NodeManager rest = rtarget.proxy(NodeManager.class);
-					rest.setUsers(activeUsers);
-				}
-				
-		
-				ws.echoTextMessage(activeUsers.toString());
+//				ResteasyClient client = new ResteasyClientBuilder().build();
+//
+//				for (Host h : NodeManagerBean.hosts) {
+//					ResteasyWebTarget rtarget = client.target("http://" + h.getAddress() + "/ChatWAR/connection");
+//					NodeManager rest = rtarget.proxy(NodeManager.class);
+//					rest.setUsers(activeUsers);
+//				}
+//				
+//		
+//				ws.echoTextMessage(activeUsers.toString());
 				return Response.status(200).build();
 			}
 

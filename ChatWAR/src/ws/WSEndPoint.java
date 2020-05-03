@@ -46,13 +46,10 @@ public class WSEndPoint {
 			message = objectMapper.readValue(msg, Message.class);
 		} catch (JsonParseException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		} catch (JsonMappingException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 
 		try {

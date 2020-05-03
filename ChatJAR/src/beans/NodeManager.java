@@ -39,7 +39,7 @@ public interface NodeManager {
 	
 	@POST
 	@Path("/user/loggedInSet")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public void setUsers(List<User> users);
 
 	@DELETE
